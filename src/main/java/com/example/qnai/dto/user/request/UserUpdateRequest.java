@@ -1,6 +1,6 @@
 package com.example.qnai.dto.user.request;
 
-import com.example.qnai.enums.Subject;
+import com.example.qnai.entity.Subject;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

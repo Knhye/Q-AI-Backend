@@ -1,11 +1,10 @@
 package com.example.qnai.dto.qna.response;
 
-import com.example.qnai.enums.Level;
-import com.example.qnai.enums.Subject;
-import lombok.AllArgsConstructor;
+import com.example.qnai.entity.Level;
+import com.example.qnai.entity.Subject;
+import com.example.qnai.entity.SubjectDetail;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -13,5 +12,6 @@ public class QnaGenerateResponse {
     private Long qnaId;
     private String question;
     private Subject subject;
+    private SubjectDetail subjectDetail;
     private Level level;
 }

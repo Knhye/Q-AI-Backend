@@ -1,11 +1,9 @@
 package com.example.qnai.entity;
 
-import com.example.qnai.enums.Subject;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package com.example.qnai.enums;
+package com.example.qnai.entity;
 
 public enum Level {
     HARD,

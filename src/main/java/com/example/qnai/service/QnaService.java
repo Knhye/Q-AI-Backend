@@ -50,6 +50,7 @@ public class QnaService {
                 .feedback(null)
                 .level(request.getLevel())
                 .subject(request.getSubject())
+                .subjectDetail(request.getSubjectDetail())
                 .user(user)
                 .build();
 
@@ -59,6 +60,7 @@ public class QnaService {
                 .qnaId(newQna.getId())
                 .question(question)
                 .subject(request.getSubject())
+                .subjectDetail(request.getSubjectDetail())
                 .level(request.getLevel())
                 .build();
     }
@@ -83,6 +85,7 @@ public class QnaService {
                 .answer(qnA.getAnswer())
                 .feedback(qnA.getFeedback())
                 .subject(qnA.getSubject())
+                .subjectDetail(qnA.getSubjectDetail())
                 .level(qnA.getLevel())
                 .createdAt(qnA.getCreatedAt())
                 .updatedAt(qnA.getUpdatedAt())

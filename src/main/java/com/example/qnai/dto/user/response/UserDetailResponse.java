@@ -1,7 +1,6 @@
 package com.example.qnai.dto.user.response;
 
-import com.example.qnai.enums.Subject;
-import lombok.AllArgsConstructor;
+import com.example.qnai.entity.Subject;
 import lombok.Builder;
 import lombok.Data;
 

@@ -1,12 +1,9 @@
 package com.example.qnai.entity;
 
-import com.example.qnai.enums.Level;
-import com.example.qnai.enums.Subject;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -31,6 +28,10 @@ public class QnA {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "q_subject")
     private Subject subject;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, name = "q_subject_detail")
+    private SubjectDetail subjectDetail;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "q_level")

@@ -1,5 +1,8 @@
 package com.example.qnai.entity;
 
+import com.example.qnai.entity.enums.Level;
+import com.example.qnai.entity.enums.Subject;
+import com.example.qnai.entity.enums.SubjectDetail;
 import jakarta.persistence.*;
 import lombok.*;
 

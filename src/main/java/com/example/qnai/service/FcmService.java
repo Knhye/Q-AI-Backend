@@ -2,12 +2,11 @@ package com.example.qnai.service;
 
 import com.example.qnai.dto.fcm.request.MessagePushServiceRequest;
 import com.example.qnai.entity.Users;
-import com.example.qnai.global.exception.CannotSendNotificationException;
 import com.example.qnai.repository.UserRepository;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.InternalException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,7 +52,7 @@ public class FcmService implements ExternalPushService{
         try {
             sendInBatches(messages);
         } catch (Exception e) {
-            throw new CannotSendNotificationException("배치 알림 전송 중 오류가 발생했습니다: " + e.getMessage());
+            throw new InternalException("배치 알림 전송 중 오류가 발생했습니다: " + e.getMessage());
         }
     }
 

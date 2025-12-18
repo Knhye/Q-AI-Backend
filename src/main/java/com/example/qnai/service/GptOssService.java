@@ -2,8 +2,7 @@ package com.example.qnai.service;
 
 import com.example.qnai.dto.gpt.response.OpenAIChatResponse;
 import com.example.qnai.dto.qna.request.QnaGenerateRequest;
-import com.example.qnai.dto.qna.response.QnaGenerateResponse;
-import com.example.qnai.global.exception.AiNoResponseException;
+import org.apache.logging.log4j.util.InternalException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -65,7 +64,7 @@ public class GptOssService {
                 || openaiResponse.getChoices().getFirst().getMessage() == null
                 || openaiResponse.getChoices().getFirst().getMessage().getContent() == null) {
 
-            throw new AiNoResponseException("OpenAI 응답이 올바르지 않습니다.");
+            throw new InternalException("OpenAI 응답이 올바르지 않습니다.");
         }
 
         // 응답 DTO 구성
@@ -121,7 +120,7 @@ public class GptOssService {
                 || openaiResponse.getChoices().getFirst().getMessage() == null
                 || openaiResponse.getChoices().getFirst().getMessage().getContent() == null) {
 
-            throw new AiNoResponseException("OpenAI 응답이 올바르지 않습니다.");
+            throw new InternalException("OpenAI 응답이 올바르지 않습니다.");
         }
 
         return openaiResponse.getChoices().getFirst().getMessage().getContent();

@@ -11,6 +11,7 @@ import com.example.qnai.repository.QnaRepository;
 import com.example.qnai.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.InternalException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class QnaService {
         String question = gptOssService.generateQuestion(request);
 
         if(question == null){
-            throw new AiNoResponseException("AI로부터 응답을 받지 못했습니다.");
+            throw new InternalException("AI로부터 응답을 받지 못했습니다.");
         }
 
         QnA newQna = QnA.builder()
@@ -152,7 +153,7 @@ public class QnaService {
         }
 
         if(!qnA.getQuestion().equals(request.getQuestion())){
-            throw new ResourceInconsistencyException("질문 또는 답안이 일치하지 않습니다.");
+            throw new ResourceNotFoundException("해당 질의응답이 존재하지 않습니다.");
         }
 
         String feedback = gptOssService.generateFeedback(request.getQuestion(), request.getAnswer());

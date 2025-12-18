@@ -31,32 +31,11 @@ public class GlobalExceptionHandler {
         return ApiResponse.fail(e.getMessage(), HttpStatus.FORBIDDEN);
     }
 
-    //AI가 응답을 반환하지 않았을 때
-    @ExceptionHandler(AiNoResponseException.class)
-    public ResponseEntity<ApiResponse<Void>> handleAiNoResponseException(AiNoResponseException e){
-        System.out.println(e.getMessage());
-        return ApiResponse.fail(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
     //리소스를 찾지 못했을 때
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiResponse<Void>> handleResourceNotFoundException(ResourceNotFoundException e){
         System.out.println(e.getMessage());
         return ApiResponse.fail(e.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    //리소스가 일치하지 않을 때
-    @ExceptionHandler(ResourceInconsistencyException.class)
-    public ResponseEntity<ApiResponse<Void>> handleResourceInconsistencyException(ResourceInconsistencyException e){
-        System.out.println(e.getMessage());
-        return ApiResponse.fail(e.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    //알림을 보낼 수 없을 때
-    @ExceptionHandler(CannotSendNotificationException.class)
-    public ResponseEntity<ApiResponse<Void>> handleCannotSendNotificationException(CannotSendNotificationException e){
-        System.out.println(e.getMessage());
-        return ApiResponse.fail(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     //검증되지 않은 토큰일 때
@@ -73,16 +52,9 @@ public class GlobalExceptionHandler {
         return ApiResponse.fail(e.getMessage(), HttpStatus.CONFLICT);
     }
 
-    //잘못된 패스워드를 입력했을 때
-    @ExceptionHandler(BadPasswordRequestException.class)
-    public ResponseEntity<ApiResponse<Void>> handleBadPasswordRequestException(BadPasswordRequestException e){
-        System.out.println(e.getMessage());
-        return ApiResponse.fail(e.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
     //요청 값이 올바르지 않을 때
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiResponse<String>> handleBadRequestException(BadRequestException e) {
         System.out.println(e.getMessage());
         return ApiResponse.fail("요청이 올바르지 않습니다.", HttpStatus.BAD_REQUEST);
     }

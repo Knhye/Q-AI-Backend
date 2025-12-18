@@ -1,5 +1,6 @@
 package com.example.qnai.entity;
 
+import com.example.qnai.entity.enums.Subject;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -39,6 +40,9 @@ public class Users {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private RefreshToken refreshToken;
+
+    @Column(unique = true)
+    private String appleSub;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;

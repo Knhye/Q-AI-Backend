@@ -42,6 +42,11 @@ public class JpaRefreshTokenRepositoryAdapter implements RefreshTokenRepository 
                 .ifPresent(token -> jpaRepository.deleteByToken(token.getToken()));
     }
 
+    @Override
+    public RefreshToken findByUser(Users user) {
+        return jpaRepository.findByUser(user);
+    }
+
     // Entity → DTO 변환
     private RefreshDto toDto(RefreshToken refreshToken) {
         return RefreshDto.builder()

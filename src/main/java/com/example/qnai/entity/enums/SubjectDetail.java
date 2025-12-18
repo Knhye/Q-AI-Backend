@@ -1,4 +1,4 @@
-package com.example.qnai.entity;
+package com.example.qnai.entity.enums;
 
 public enum SubjectDetail {
 

@@ -1,6 +1,8 @@
 package com.example.qnai.service;
 
+import com.example.qnai.config.AppleTokenUtil;
 import com.example.qnai.config.TokenProvider;
+import com.example.qnai.dto.oauth.AppleSignInRequest;
 import com.example.qnai.dto.refreshToken.RefreshDto;
 import com.example.qnai.dto.refreshToken.request.RefreshRequest;
 import com.example.qnai.dto.refreshToken.response.RefreshResponse;
@@ -18,9 +20,11 @@ import com.example.qnai.repository.BlacklistRepository;
 import com.example.qnai.repository.RefreshTokenRepository;
 import com.example.qnai.repository.UserNotificationSettingRepository;
 import com.example.qnai.repository.UserRepository;
+import com.nimbusds.jose.JOSEException;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +33,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -44,6 +52,7 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserNotificationSettingRepository userNotificationSettingRepository;
     private final BlacklistRepository blacklistRepository;
+    private final AppleTokenUtil appleTokenUtil;
 
 
     public SignupResponse signup(SignupRequest request){
@@ -89,6 +98,26 @@ public class AuthService {
 
         long refreshTokenTtl = 7 * 24 * 60 * 60; // 7일 (초 단위)
         refreshTokenRepository.save(refreshToken, user, refreshTokenTtl);
+
+        return LoginResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    @Transactional
+    public LoginResponse appleLogin(AppleSignInRequest request){
+        Map<String, Object> claims = appleTokenUtil.validateAndParse(request.getIdentityToken());
+
+        String appleSub = (String) claims.get("sub");
+        String email = (String) claims.get("email");
+
+        Users user = findOrCreate(appleSub, email);
+
+        String accessToken = tokenProvider.createAccessToken(user.getEmail());
+        String refreshToken = tokenProvider.createRefreshToken(user.getEmail());
+
+        saveRefreshToken(user, refreshToken);
 
         return LoginResponse.builder()
                 .accessToken(accessToken)
@@ -188,5 +217,21 @@ public class AuthService {
         }
 
         return null;
+    }
+
+    private Users findOrCreate(String appleSub, String email) {
+        return userRepository.findByAppleSub(appleSub)
+                .orElseGet(() -> userRepository.save(
+                        Users.builder()
+                                .appleSub(appleSub)
+                                .email(email)
+                                .build()
+                ));
+    }
+
+    private void saveRefreshToken(Users user, String refreshToken) {
+        RefreshToken existingRefreshToken = refreshTokenRepository.findByUser(user);
+        existingRefreshToken.updateToken(refreshToken);
+        userRepository.save(user);
     }
 }

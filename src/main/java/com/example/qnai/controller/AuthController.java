@@ -2,6 +2,7 @@ package com.example.qnai.controller;
 
 
 import com.example.qnai.common.ApiResponse;
+import com.example.qnai.dto.oauth.AppleSignInRequest;
 import com.example.qnai.dto.refreshToken.response.RefreshResponse;
 import com.example.qnai.dto.user.request.DeleteUserRequest;
 import com.example.qnai.dto.user.request.LoginRequest;
@@ -11,6 +12,7 @@ import com.example.qnai.dto.user.request.SignupRequest;
 import com.example.qnai.dto.user.response.LoginResponse;
 import com.example.qnai.service.AuthService;
 import com.example.qnai.dto.user.response.SignupResponse;
+import com.google.protobuf.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,6 +40,13 @@ public class AuthController {
     @Operation(summary = "User Log in", description = "유저 로그인 API")
     public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request){
         LoginResponse response = authService.login(request);
+        return ApiResponse.ok(response, "로그인이 성공적으로 완료되었습니다.");
+    }
+
+    @PostMapping("/login/apple")
+    @Operation(summary = "User Log in To Apple", description = "Apple 소셜 로그인 API")
+    public ResponseEntity<ApiResponse<LoginResponse>> appleLogin(@Valid @RequestBody AppleSignInRequest request){
+        LoginResponse response = authService.appleLogin(request);
         return ApiResponse.ok(response, "로그인이 성공적으로 완료되었습니다.");
     }
 

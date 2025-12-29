@@ -44,19 +44,4 @@ public class ApiResponse<T> {
                     .build()
         );
     }
-
-    //filter, handler 용
-    public static <T> ApiResponse<T> body(String message) {
-        return ApiResponse.<T>builder()
-                .success(true)
-                .message(message)
-                .build();
-    }
-
-    public static <T> ApiResponse<T> error(String message) {
-        return ApiResponse.<T>builder()
-                .success(false)
-                .message(message)
-                .build();
-    }
 }

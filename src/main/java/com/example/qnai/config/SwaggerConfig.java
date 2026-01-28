@@ -17,7 +17,10 @@ public class SwaggerConfig {
                 .info(new Info().title("Q&AI API 문서")
                         .description("AI 기술 면접 준비 서비스 API")
                         .version("1.0"))
-                .addSecurityItem(new SecurityRequirement())
+                .addSecurityItem(
+                        new SecurityRequirement().addList("bearerAuth")
+                )
+
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth", new SecurityScheme()
                                 .type(SecurityScheme.Type.HTTP)

@@ -1,11 +1,15 @@
 package com.example.qnai.service;
 
+import com.example.qnai.dto.gpt.request.AIFeedbackRequest;
 import com.example.qnai.dto.qna.request.AnswerUpdateRequest;
 import com.example.qnai.dto.qna.request.FeedbackGenerateRequest;
 import com.example.qnai.dto.qna.request.QnaGenerateRequest;
 import com.example.qnai.dto.qna.response.*;
 import com.example.qnai.entity.QnA;
 import com.example.qnai.entity.Users;
+import com.example.qnai.entity.enums.Level;
+import com.example.qnai.entity.enums.Subject;
+import com.example.qnai.entity.enums.SubjectDetail;
 import com.example.qnai.global.exception.*;
 import com.example.qnai.repository.QnaRepository;
 import com.example.qnai.repository.UserRepository;
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,11 +31,29 @@ import java.util.Objects;
 public class QnaService {
     private final QnaRepository qnaRepository;
     private final UserRepository userRepository;
-    private final GptOssService gptOssService;
+    private final AIService aiService;
 
     //질문 생성
     @Transactional
-    public QnaGenerateResponse generateQuestion(HttpServletRequest httpServletRequest, QnaGenerateRequest request) {
+    public QnaGenerateResponse generateQuestion(QnaGenerateRequest request) {
+
+        //Request 값 검증
+        if (request.getSubject() == null
+                || Arrays.stream(Subject.values())
+                .noneMatch(s -> s.name().equals(request.getSubject()))) {
+            throw new BadRequestException("유효하지 않은 Subject 값입니다.");
+        }
+        if (request.getSubjectDetail() == null
+                || Arrays.stream(SubjectDetail.values())
+                .noneMatch(s -> s.name().equals(request.getSubjectDetail()))) {
+            throw new BadRequestException("유효하지 않은 Subject Detail 값입니다.");
+        }
+        if (request.getLevel() == null
+                || Arrays.stream(Level.values())
+                .noneMatch(s -> s.name().equals(request.getLevel()))) {
+            throw new BadRequestException("유효하지 않은 난이도입니다.");
+        }
+
         String email = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
@@ -38,7 +61,7 @@ public class QnaService {
         Users user = userRepository.findByEmailAndIsDeletedFalse(email)
                 .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 유저입니다."));
 
-        String question = gptOssService.generateQuestion(request);
+        String question = aiService.generateQuestion(request);
 
         if(question == null){
             throw new InternalException("AI로부터 응답을 받지 못했습니다.");
@@ -49,9 +72,9 @@ public class QnaService {
                 .answer(null)
                 .createdAt(LocalDateTime.now())
                 .feedback(null)
-                .level(request.getLevel())
-                .subject(request.getSubject())
-                .subjectDetail(request.getSubjectDetail())
+                .level(Level.valueOf(request.getLevel()))
+                .subject(Subject.valueOf(request.getSubject()))
+                .subjectDetail(SubjectDetail.valueOf(request.getSubjectDetail()))
                 .user(user)
                 .build();
 
@@ -156,7 +179,12 @@ public class QnaService {
             throw new ResourceNotFoundException("해당 질의응답이 존재하지 않습니다.");
         }
 
-        String feedback = gptOssService.generateFeedback(request.getQuestion(), request.getAnswer());
+        AIFeedbackRequest aiFeedbackRequest = AIFeedbackRequest.builder()
+                .question(request.getQuestion())
+                .answer(request.getAnswer())
+                .build();
+
+        String feedback = aiService.generateFeedback(aiFeedbackRequest);
 
         qnA.updateFeedback(feedback);
         qnaRepository.save(qnA);

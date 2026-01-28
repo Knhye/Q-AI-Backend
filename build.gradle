@@ -25,31 +25,64 @@ repositories {
 }
 
 dependencies {
+
+	// jpa
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// web (spring mvc)
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// lombok
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// mysql
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'org.mockito:mockito-core'
+
+	// security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// jwt
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+	implementation 'com.nimbusds:nimbus-jose-jwt:9.31'
+
+	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.apache.commons:commons-pool2'
-	implementation 'com.theokanning.openai-gpt3-java:service:0.18.2'
-	implementation 'com.squareup.okio:okio:3.9.0' // openAI 버전 호환
+
+	// webflux (reactive / webclient)
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
-	testImplementation 'org.mockito:mockito-core'
 	testImplementation 'io.projectreactor:reactor-test'
+
+	// openai
+	implementation 'com.theokanning.openai-gpt3-java:service:0.18.2'
+	implementation 'com.squareup.okio:okio:3.9.0'
+
+	// mock server
+	testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
+
+	// firebase
 	implementation 'com.google.firebase:firebase-admin:9.2.0'
+
+	// swagger (openapi)
 	implementation 'org.springdoc:springdoc-openapi-starter-common:2.8.6'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6'
-	implementation 'com.nimbusds:nimbus-jose-jwt:9.31'
+
+	// flyway
+	implementation "org.flywaydb:flyway-core"
+	implementation "org.flywaydb:flyway-mysql"
 }
+
 
 tasks.named('test') {
 	useJUnitPlatform()

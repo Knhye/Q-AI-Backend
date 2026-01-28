@@ -9,11 +9,11 @@ import lombok.Data;
 @Data
 public class QnaGenerateRequest {
     @NotNull
-    private Subject subject;
+    private String subject;
 
     @NotNull
-    private SubjectDetail subjectDetail;
+    private String subjectDetail;
 
     @NotNull
-    private Level level;
+    private String level;
 }

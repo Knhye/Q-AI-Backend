@@ -24,8 +24,8 @@ public class QnaController {
     private final QnaService qnaService;
     @PostMapping("/question")
     @Operation(summary = "Generate Question", description = "질문 생성 API")
-    public ResponseEntity<ApiResponse<QnaGenerateResponse>> generateQuestion(HttpServletRequest httpServletRequest, @Valid @RequestBody QnaGenerateRequest request){
-        QnaGenerateResponse response = qnaService.generateQuestion(httpServletRequest, request);
+    public ResponseEntity<ApiResponse<QnaGenerateResponse>> generateQuestion(@Valid @RequestBody QnaGenerateRequest request){
+        QnaGenerateResponse response = qnaService.generateQuestion(request);
         return ApiResponse.ok(response, "질문이 생성되었습니다.");
     }
 

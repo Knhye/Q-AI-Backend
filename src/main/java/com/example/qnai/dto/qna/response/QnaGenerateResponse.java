@@ -11,7 +11,7 @@ import lombok.Data;
 public class QnaGenerateResponse {
     private Long qnaId;
     private String question;
-    private Subject subject;
-    private SubjectDetail subjectDetail;
-    private Level level;
+    private String subject;
+    private String subjectDetail;
+    private String level;
 }

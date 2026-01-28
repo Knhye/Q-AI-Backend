@@ -12,7 +12,7 @@ public class QnaGenerateRequest {
     private String subject;
 
     @NotNull
-    private String subjectDetail;
+    private String subjectdetail;
 
     @NotNull
     private String level;

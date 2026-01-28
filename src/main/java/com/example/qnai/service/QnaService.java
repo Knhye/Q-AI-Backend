@@ -43,9 +43,9 @@ public class QnaService {
                 .noneMatch(s -> s.name().equals(request.getSubject()))) {
             throw new BadRequestException("유효하지 않은 Subject 값입니다.");
         }
-        if (request.getSubjectdetail() == null
+        if (request.getSubjectDetail() == null
                 || Arrays.stream(SubjectDetail.values())
-                .noneMatch(s -> s.name().equals(request.getSubjectdetail()))) {
+                .noneMatch(s -> s.name().equals(request.getSubjectDetail()))) {
             throw new BadRequestException("유효하지 않은 Subject Detail 값입니다.");
         }
         if (request.getLevel() == null
@@ -74,7 +74,7 @@ public class QnaService {
                 .feedback(null)
                 .level(Level.valueOf(request.getLevel()))
                 .subject(Subject.valueOf(request.getSubject()))
-                .subjectDetail(SubjectDetail.valueOf(request.getSubjectdetail()))
+                .subjectDetail(SubjectDetail.valueOf(request.getSubjectDetail()))
                 .user(user)
                 .build();
 
@@ -84,7 +84,7 @@ public class QnaService {
                 .qnaId(newQna.getId())
                 .question(question)
                 .subject(request.getSubject())
-                .subjectDetail(request.getSubjectdetail())
+                .subjectDetail(request.getSubjectDetail())
                 .level(request.getLevel())
                 .build();
     }
